@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  bot:
+    build: .
+    container_name: Kernel
+    env_file:
+      - .env
+    restart: always
