@@ -1,6 +1,7 @@
 import threading
 from bot.bot import bot
 from web.app import app
+from shared.config import DISCORD_TOKEN
 
 
 def run():
@@ -13,4 +14,4 @@ if __name__ == '__main__':
     t.start()
 
     # Start the bot
-    bot.run('YOUR TOKEN HERE')  # Replace 'YOUR TOKEN HERE' with your actual token
+    bot.run(DISCORD_TOKEN)  # Replace 'YOUR TOKEN HERE' with your actual token
