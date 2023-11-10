@@ -11,7 +11,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def clear_channel(channel):
     await channel.purge()
 
-
 # Define the update_message function
 async def update_message(content):
     channel = bot.get_channel(CHANNEL_ID)
