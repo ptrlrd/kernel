@@ -4,11 +4,12 @@ from web.app import app
 from shared.config import DISCORD_TOKEN
 import logging
 
-logger = logging.getLogger('nextcord')
-logger.setLevel(logging.DEBUG)
-handler = logging.StreamHandler()
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+# Use the below to enable debug logging
+# logger = logging.getLogger('nextcord')
+# logger.setLevel(logging.DEBUG)
+# handler = logging.StreamHandler()
+# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+# logger.addHandler(handler)
 
 
 def run():
