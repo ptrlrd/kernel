@@ -1,6 +1,6 @@
 from flask import Flask, request
 import requests
-from bot.bot import update_message
+from bot.bot import update_message, bot
 
 app = Flask(__name__)
 

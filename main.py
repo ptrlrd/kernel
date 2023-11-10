@@ -2,6 +2,13 @@ import threading
 from bot.bot import bot
 from web.app import app
 from shared.config import DISCORD_TOKEN
+import logging
+
+logger = logging.getLogger('nextcord')
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 
 def run():
@@ -10,8 +17,7 @@ def run():
 
 if __name__ == '__main__':
     # Start the Flask server in a new thread
-    t = threading.Thread(target=run)
-    t.start()
+    threading.Thread(target=run).start()
 
     # Start the bot
-    bot.run(DISCORD_TOKEN)  # Replace 'YOUR TOKEN HERE' with your actual token
+    bot.run(DISCORD_TOKEN)
