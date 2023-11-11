@@ -1,0 +1,38 @@
+name: Dockerized Bot Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: user/kernel:latest
+
+    - name: Set up Docker Compose
+      run: docker compose -f docker-compose.yml up -d
+
+    # Use GitHub secrets for environment variables
+    env:
+      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+      PREFIX: ${{ secrets.PREFIX }}
