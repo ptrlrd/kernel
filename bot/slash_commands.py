@@ -26,7 +26,7 @@ async def vote(interaction: Interaction):
     await interaction.response.send_message("Please vote for us!", view=view, ephemeral=True)
 
 
-@bot.slash_command(name="Update Resources", description="Updates the message in #resources.")
+@bot.slash_command(name="updates_resource", description="Updates the message in #resources.")
 @commands.has_any_role(*STAFF_ROLES)
 async def update_command(interaction: Interaction, content: str):
     await update_message(content)
