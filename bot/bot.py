@@ -21,7 +21,7 @@ async def update_message(content):
 async def on_ready():
     print('Bot is ready.')
 
-from . import slash_commands
+from . import slash_commands,context_menus
 
 if __name__ == '__main__':
     bot.run(DISCORD_TOKEN)
