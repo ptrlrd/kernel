@@ -30,7 +30,7 @@ jobs:
         tags: ptrlrd/kernel:latest
 
     - name: Set up Docker Compose
-      run: docker compose -f docker-compose.yml up -d
+      run: docker compose -f docker-compose.yaml up -d
 
     # Use GitHub secrets for environment variables
     env:
