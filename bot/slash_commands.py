@@ -30,12 +30,13 @@ async def vote(interaction: Interaction):
 @bot.slash_command(name="update_resources", description="Updates the message in #resources.")
 @commands.has_any_role(*STAFF_ROLES)
 async def update_command(interaction: Interaction):
-    # Fetch the content from the URL
+    # Defer the response if the operation might take longer
+    await interaction.response.defer(ephemeral=True)
+
+    # Fetch the content and update the message
     response = requests.get('https://raw.githubusercontent.com/ptrlrd/dpc-resources/main/resources.txt')
     content = response.text
-
-    # Update the message on Discord
     await update_message(content)
 
-    # Respond to the command
-    await interaction.response.send_message("Resources updated successfully!", ephemeral=True)
+    # Send a follow-up message
+    await interaction.followup.send("Resources updated successfully!", ephemeral=True)
