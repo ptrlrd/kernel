@@ -27,11 +27,8 @@ jobs:
         push: true
         tags: ptrlrd/kernel:latest
 
-    - name: Create .env file
-      run: |
-        echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" >> .env
-        echo "PREFIX=${{ secrets.PREFIX }}" >> .env
+    - name: Pull Latest Docker Image
+      run: docker pull ptrlrd/kernel:latest
 
-
-    - name: Set up Docker Compose
-      run: docker compose -f docker-compose.yaml up -d
+    - name: Restart Docker Compose Services
+      run: docker compose -f docker-compose.yaml up -d --force-recreate --no-deps bot

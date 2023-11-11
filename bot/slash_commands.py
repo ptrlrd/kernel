@@ -1,3 +1,4 @@
+import requests
 from nextcord import Interaction, ui, ButtonStyle
 from nextcord.ext import commands
 
@@ -26,8 +27,15 @@ async def vote(interaction: Interaction):
     await interaction.response.send_message("Please vote for us!", view=view, ephemeral=True)
 
 
-@bot.slash_command(name="updates_resource", description="Updates the message in #resources.")
+@bot.slash_command(name="update_resources", description="Updates the message in #resources.")
 @commands.has_any_role(*STAFF_ROLES)
-async def update_command(interaction: Interaction, content: str):
+async def update_command(interaction: Interaction):
+    # Fetch the content from the URL
+    response = requests.get('https://raw.githubusercontent.com/ptrlrd/dpc-resources/main/resources.txt')
+    content = response.text
+
+    # Update the message on Discord
     await update_message(content)
-    await interaction.response.send_message("Message updated successfully!", ephemeral=True)
+
+    # Respond to the command
+    await interaction.response.send_message("Resources updated successfully!", ephemeral=True)
