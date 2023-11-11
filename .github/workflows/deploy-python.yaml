@@ -1,4 +1,4 @@
-name: Deploy Kernel on Peter's Server
+name: Deploy Kernel on Self-hosted Server
 
 on:
   push:
