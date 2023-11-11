@@ -1,84 +1,89 @@
 
-# Kernel Discord Bot
+# Kernel -- A Discord Bot
+Used in the Devops, Programming, and Coding Discord
+Join our discord here: https://discord.gg/devops-programming-and-cloud-930170875049820181
 
-## Description
+## Project Overview
 
-Kernel is a Discord bot integrated with a web server, capable of responding to webhooks and updating messages on Discord. It leverages Flask for the web server and Nextcord for Discord bot functionality.
+This Discord bot, developed using Nextcord.py, is designed to enhance server functionality and user interaction on Discord. It includes features like command handling, context menus, and slash commands. The project is structured in a modular fashion and is deployed using Docker.
 
-## Features
+## Files and Directories
 
-- Web server running with Flask to handle webhook events.
-- Discord bot capable of sending messages and responding to commands.
-- Integration of Discord bot and web server in a multithreaded environment.
-- Uses environment variables for configuration, enhancing security and flexibility.
-- Containerized with Docker for easy deployment and scalability.
+### Tree Structure
+```
+.
+├── main.py
+├── requirements.txt
+├── Dockerfile
+├── README.md
+├── docker-compose.yaml
+├── bot
+│   ├── __init__.py
+│   ├── bot.py
+│   ├── context_menus.py
+│   ├── slash_commands.py
+│   └── utils.py
+├── docker-compose.yaml
+├── main.py
+├── requirements.txt
+├── shared
+│   ├── __init__.py
+│   └── config.py
+└── web
+    ├── __init__.py
+    └── app.py
+```
+
+### Files
+
+1. **bot.py**:
+   - Main file of the bot, handling initialization and core functions.
+
+2. **context_menus.py**:
+   - Implements context menu commands for message interactions.
+
+3. **slash_commands.py**:
+   - Contains slash commands for user-friendly bot interactions.
+
+4. **config.py**:
+   - Manages configuration settings like tokens and channel IDs.
+
+5. **app.py**:
+   - Flask application to handle webhooks and update messages on Discord.
+
+6. **main.py**:
+   - Entry point for starting both the Discord bot and Flask server.
+
+7. **Dockerfile**:
+   - Instructions for Docker to build the bot's container.
+
+8. **docker-compose.yaml**:
+   - Configures the bot's service, using Docker Compose.
 
 ## Setup and Installation
 
 ### Prerequisites
+- Python 3.9
+- Docker (for containerized deployment)
 
-- Python 3.9 or higher
-- Docker and Docker Compose
-- A Discord Bot Token
+### Local Setup
+1. Install dependencies: `pip install -r requirements.txt`
+2. Set up environment variables in `.env`.
+3. Run the bot: `python main.py`
 
-### Local Development
-
-1. Clone the repository to your local machine.
-2. Install the required Python dependencies:
-
-\```sh
-pip install -r requirements.txt
-\```
-
-3. Create a `.env` file at the root of the project with the following contents:
-
-\```env
-DISCORD_TOKEN=your_discord_bot_token
-PREFIX=your_command_prefix
-\```
-
-4. Run the bot and web server:
-
-\```sh
-python main.py
-\```
-
-### Containerization with Docker
-
-1. Ensure Docker and Docker Compose are installed on your system.
-2. Build the Docker image:
-
-\```sh
-docker-compose build
-\```
-
-3. Start the service with Docker Compose:
-
-\```sh
-docker-compose up
-\```
-
-This will start the bot and web server within a Docker container named "Kernel".
+### Docker Setup
+1. Build the container: `docker-compose build`
+2. Start the container: `docker-compose up`
 
 ## Usage
 
-### Discord Commands
-
-- `!hello`: The bot will reply with "Hello World!" in the Discord channel.
-
-### Webhooks
-
-- `/webhook`: Endpoint for receiving webhook events and updating Discord messages.
-- `/update`: Endpoint for updating a message on Discord with the provided content.
-
-## Deployment
-
-The bot can be deployed to any environment that supports Docker. Use the provided `docker-compose.yml` file to build and run the container.
+- The bot can be interacted with using slash commands or context menus in Discord.
+- It responds to webhooks via the Flask server.
 
 ## Contributing
 
-Contributions to Kernel are welcome! Please submit a pull request or open an issue if you have any features or improvements.
+Contributions are welcome. Please adhere to the project's standards and submit pull requests for any changes.
 
 ## License
 
-N/A
+This project is not licensed
