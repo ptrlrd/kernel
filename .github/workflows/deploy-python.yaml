@@ -1,4 +1,4 @@
-name: Dockerized Bot Deployment
+name: Deploy Kernel on Peter's Server
 
 on:
   push:
@@ -29,10 +29,10 @@ jobs:
         push: true
         tags: ptrlrd/kernel:latest
 
+    - name: Create .env file
+      run: |
+        echo DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} >> .env
+        echo PREFIX=${{ secrets.PREFIX }} >> .env
+
     - name: Set up Docker Compose
       run: docker compose -f docker-compose.yaml up -d
-
-    # Use GitHub secrets for environment variables
-    env:
-      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-      PREFIX: ${{ secrets.PREFIX }}
