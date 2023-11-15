@@ -1,4 +1,5 @@
-from nextcord import Interaction, SlashOption
+
+from nextcord import Interaction, SlashOption, Member
 from nextcord.ext import commands
 
 from bot.bot import bot
@@ -17,8 +18,7 @@ class UtilityCog(commands.Cog):
         await interaction.response.send_message(message)
 
     @bot.slash_command(name="userinfo", description="Get information about a user")
-    async def userinfo(self, interaction: Interaction,
-                       user: bot.Member = SlashOption(description="The user to get info about")):
+    async def userinfo(self, interaction: Interaction, user: Member = SlashOption(description="The user to get info about")):
         embed = bot.Embed(title="User Information", color=0x00ff00)
         embed.add_field(name="Username", value=user.name, inline=False)
         embed.add_field(name="ID", value=user.id, inline=False)
