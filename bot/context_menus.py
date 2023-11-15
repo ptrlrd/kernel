@@ -14,6 +14,9 @@ async def has_required_role(interaction: Interaction):
 
 
 async def handle_command(interaction: Interaction, message: Message, channel_id: int):
+    # Acknowledge the interaction immediately
+    await interaction.response.defer()
+
     if await has_required_role(interaction):
         message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
         notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
@@ -21,14 +24,15 @@ async def handle_command(interaction: Interaction, message: Message, channel_id:
         # Send a reply to the original message
         await message.reply(notification)
 
-        # Wait for 1 minutes
+        # Wait for 1 minute
         await asyncio.sleep(60)
         try:
             await message.delete()
         except nextcord.NotFound:
             pass
     else:
-        await interaction.response.send_message("You do not have permission to use this command.", ephemeral=True)
+        # Send a follow-up message since we've already acknowledged the interaction
+        await interaction.followup.send("You do not have permission to use this command.", ephemeral=True)
 
 
 @bot.message_command(name="Send to employment")
