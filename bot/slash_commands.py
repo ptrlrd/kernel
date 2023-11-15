@@ -1,5 +1,5 @@
 import requests
-from nextcord import Interaction, ui, ButtonStyle
+from nextcord import Interaction, ui, ButtonStyle, SlashOption
 from nextcord.ext import commands
 
 from bot.bot import bot, update_message

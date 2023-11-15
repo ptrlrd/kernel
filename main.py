@@ -20,5 +20,6 @@ if __name__ == '__main__':
     # Start the Flask server in a new thread
     threading.Thread(target=run).start()
 
+    bot.load_extension('slash_utilities')
     # Start the bot
     bot.run(DISCORD_TOKEN)
