@@ -21,7 +21,7 @@ async def handle_command(interaction: Interaction, message: Message, channel_id:
         notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
 
         # Send a reply to the original message
-        sent_notification = await message.reply(notification)
+        await message.reply(notification)
 
         # Countdown duration in seconds
         countdown_duration = 60
@@ -37,14 +37,12 @@ async def handle_command(interaction: Interaction, message: Message, channel_id:
 
         try:
             await message.delete()
-            await sent_notification.delete()
             await countdown_message.edit(content="Message has been deleted.")
         except nextcord.NotFound:
             pass
     else:
         # Send a follow-up ephemeral message since we've already acknowledged the interaction
         await interaction.followup.send("You do not have permission to use this command.", ephemeral=True)
-
 
 @bot.message_command(name="Send to employment")
 async def send_to_show_case(interaction: Interaction, message: Message):
