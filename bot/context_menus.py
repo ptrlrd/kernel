@@ -14,7 +14,7 @@ async def has_required_role(interaction: Interaction):
 
 
 async def handle_command(interaction: Interaction, message: Message, channel_id: int):
-    # Acknowledge the interaction immediately and say the bot will respond later
+    # Acknowledge the interaction immediately
     await interaction.response.defer()
 
     if await has_required_role(interaction):
@@ -26,13 +26,13 @@ async def handle_command(interaction: Interaction, message: Message, channel_id:
         # Countdown duration in seconds
         countdown_duration = 60
 
-        # Send initial countdown message as a follow-up to the interaction
-        countdown_message = await interaction.followup.send(f"Message will be deleted in {countdown_duration} seconds.")
+        # Send initial countdown message as an ephemeral follow-up
+        countdown_message = await interaction.followup.send(f"Message will be deleted in {countdown_duration} seconds.", ephemeral=True)
 
         while countdown_duration > 0:
             await asyncio.sleep(5)  # Update the countdown every 5 seconds
             countdown_duration -= 5
-            # Edit the countdown message
+            # Edit the countdown message (ephemeral)
             await countdown_message.edit(content=f"Message will be deleted in {countdown_duration} seconds.")
 
         try:
@@ -42,9 +42,8 @@ async def handle_command(interaction: Interaction, message: Message, channel_id:
         except nextcord.NotFound:
             pass
     else:
-        # Send a follow-up message since we've already acknowledged the interaction
+        # Send a follow-up ephemeral message since we've already acknowledged the interaction
         await interaction.followup.send("You do not have permission to use this command.", ephemeral=True)
-
 
 @bot.message_command(name="Send to employment")
 async def send_to_show_case(interaction: Interaction, message: Message):
