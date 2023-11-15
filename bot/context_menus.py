@@ -14,20 +14,31 @@ async def has_required_role(interaction: Interaction):
 
 
 async def handle_command(interaction: Interaction, message: Message, channel_id: int):
-    # Acknowledge the interaction immediately
+    # Acknowledge the interaction immediately and say the bot will respond later
     await interaction.response.defer()
 
     if await has_required_role(interaction):
-        message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
         notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
 
         # Send a reply to the original message
-        await message.reply(notification)
+        sent_notification = await message.reply(notification)
 
-        # Wait for 1 minute
-        await asyncio.sleep(60)
+        # Countdown duration in seconds
+        countdown_duration = 60
+
+        # Send initial countdown message as a follow-up to the interaction
+        countdown_message = await interaction.followup.send(f"Message will be deleted in {countdown_duration} seconds.")
+
+        while countdown_duration > 0:
+            await asyncio.sleep(5)  # Update the countdown every 5 seconds
+            countdown_duration -= 5
+            # Edit the countdown message
+            await countdown_message.edit(content=f"Message will be deleted in {countdown_duration} seconds.")
+
         try:
             await message.delete()
+            await sent_notification.delete()
+            await countdown_message.edit(content="Message has been deleted.")
         except nextcord.NotFound:
             pass
     else:
