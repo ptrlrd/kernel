@@ -2,7 +2,7 @@ import threading
 from bot.bot import bot
 from web.app import app
 from shared.config import DISCORD_TOKEN
-import logging
+# import logging
 
 # Use the below to enable debug logging
 # logger = logging.getLogger('nextcord')

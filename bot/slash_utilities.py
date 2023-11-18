@@ -3,6 +3,8 @@ from nextcord.ext import commands
 
 from bot.bot import bot
 
+#TODO: Merge Slash_Utility.py and Slash_Commands.py into one file and delete this one and use cogs
+
 
 class UtilityCog(commands.Cog):
     """
