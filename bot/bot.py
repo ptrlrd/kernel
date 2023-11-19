@@ -44,7 +44,7 @@ async def on_ready():
     print('Bot is ready.')
 
 # Importing slash commands and context menus
-from . import slash_commands, context_menus
+# from . import slash_commands, context_menus
 
 if __name__ == '__main__':
     # Run the bot with the specified token

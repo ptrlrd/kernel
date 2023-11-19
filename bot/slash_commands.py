@@ -15,11 +15,11 @@ class CoreCommandCogs(commands.Cog):
         self.bot = bot
         self.update_message = update_message_func
 
-    @commands.slash_command(name="hello", description="Says hello")
+    @bot.slash_command(name="hello", description="Says hello")
     async def hello(self, interaction: Interaction):
         await interaction.response.send_message("Hello World!", ephemeral=True)
 
-    @commands.slash_command(name="vote", description="Vote for the server on different platforms!")
+    @bot.slash_command(name="vote", description="Vote for the server on different platforms!")
     async def vote(self, interaction: Interaction):
         view = ui.View()
         # Add voting platform buttons to the view
@@ -30,7 +30,7 @@ class CoreCommandCogs(commands.Cog):
         view.add_item(ui.Button(style=ButtonStyle.url, label="Discords", url="https://discords.com/servers/dev"))
         await interaction.response.send_message("Please vote for us!", view=view, ephemeral=True)
 
-    @commands.slash_command(name="update_resources", description="Updates the message in #resources.")
+    @bot.slash_command(name="update_resources", description="Updates the message in #resources.")
     @commands.has_any_role(*STAFF_ROLES)
     async def update_command(self, interaction: Interaction):
         await interaction.response.defer(ephemeral=True)
@@ -57,7 +57,7 @@ class UtilityCog(commands.Cog):
         """
         self.bot = bot
 
-    @commands.slash_command(name="ping", description="Check the bot's latency")
+    @bot.slash_command(name="ping", description="Check the bot's latency")
     async def ping(self, interaction: Interaction):
         """
         A slash command to check the bot's current latency.
@@ -67,7 +67,7 @@ class UtilityCog(commands.Cog):
         """
         await interaction.response.send_message(f"Pong! Latency: {round(self.bot.latency * 1000)}ms")
 
-    @commands.slash_command(name="echo", description="Repeat a message")
+    @bot.slash_command(name="echo", description="Repeat a message")
     async def echo(self, interaction: Interaction, message: str = SlashOption(description="The message to repeat")):
         """
         A slash command to repeat a message sent by the user.
@@ -78,7 +78,7 @@ class UtilityCog(commands.Cog):
         """
         await interaction.response.send_message(message)
 
-    @commands.slash_command(name="userinfo", description="Get information about a user")
+    @bot.slash_command(name="userinfo", description="Get information about a user")
     async def userinfo(self, interaction: Interaction,
                        user: Member = SlashOption(description="The user to get info about")):
         """
