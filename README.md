@@ -86,4 +86,4 @@ Contributions are welcome. Please adhere to the project's standards and submit p
 
 ## License
 
-This project is not licensed
+Review the License file for more information
