@@ -4,6 +4,7 @@ from bot.bot import update_message, bot
 
 app = Flask(__name__)
 
+
 @app.route('/webhook', methods=['POST'])
 def respond():
     """
@@ -26,6 +27,7 @@ def respond():
     # Update the message on Discord
     bot.loop.create_task(update_message(content))
     return "", 200
+
 
 @app.route('/update', methods=['POST'])
 def update():
