@@ -12,6 +12,7 @@ def run():
 if __name__ == '__main__':
     if ENABLE_LOGGING:
         setup_logging()  # Setup logging using the function from shared.logger
+        # To enable extensive logging go to /shared/config.py and set ENABLE_LOGGING to True
 
     # Start the Flask server in a new thread
     threading.Thread(target=run).start()
