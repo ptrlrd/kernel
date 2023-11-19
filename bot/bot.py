@@ -6,6 +6,7 @@ from shared.config import CHANNEL_ID, DISCORD_TOKEN, GUILD_ID
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+
 async def clear_channel(channel):
     """
     Clears all messages from the given channel.

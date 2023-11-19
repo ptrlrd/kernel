@@ -11,9 +11,9 @@ class CoreCommandCogs(commands.Cog):
     Cog for server interaction commands.
     """
 
-    def __init__(self, bot):
+    def __init__(self, bot, update_message_func):
         self.bot = bot
-        self.update_message = bot.update_message
+        self.update_message = update_message_func
 
     @bot.slash_command(name="hello", description="Says hello")
     async def hello(self, interaction: Interaction):
@@ -103,5 +103,5 @@ def setup(bot):
     Args:
     bot: The bot instance to which the cog is being added.
     """
-    bot.add_cog(CoreCommandCogs(bot))
+    bot.add_cog(CoreCommandCogs(bot, update_message))
     bot.add_cog(UtilityCog(bot))

@@ -3,8 +3,7 @@ from nextcord import Interaction, Message
 from bot.bot import bot
 import asyncio
 from shared.config import EMPLOYMENT_CHANNEL_ID, SHOWCASE_CHANNEL_ID, HELP_FORUM_CHANNEL_ID
-
-STAFF_ROLES = ["Staff", "Senior Staff", "Root"]  # Replace with actual role names or IDs
+from shared.config import STAFF_ROLES
 
 
 async def has_required_role(interaction: Interaction):
