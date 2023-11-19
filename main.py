@@ -21,5 +21,6 @@ if __name__ == '__main__':
     threading.Thread(target=run).start()
     # Load the slash commands
     bot.load_extension('bot.slash_commands')
+    bot.load_extension('bot.context_menus')
     # Start the bot
     bot.run(DISCORD_TOKEN)
