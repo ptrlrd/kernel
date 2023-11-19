@@ -72,8 +72,7 @@ This Discord bot, developed using Nextcord.py, is designed to enhance server fun
 3. Run the bot: `python main.py`
 
 ### Docker Setup
-1. Build the container: `docker-compose build`
-2. Start the container: `docker-compose up`
+1. Build and start the container: `sudo docker compose up --build -d `
 
 ## Usage
 
