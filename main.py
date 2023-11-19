@@ -1,15 +1,8 @@
 import threading
 from bot.bot import bot
 from web.app import app
-from shared.config import DISCORD_TOKEN
-import logging
-
-# Use the below to enable debug logging
-# logger = logging.getLogger('nextcord')
-# logger.setLevel(logging.DEBUG)
-# handler = logging.StreamHandler()
-# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-# logger.addHandler(handler)
+from shared.config import DISCORD_TOKEN, ENABLE_LOGGING
+from shared.logger import setup_logging  # Importing from your logger module
 
 
 def run():
@@ -17,9 +10,12 @@ def run():
 
 
 if __name__ == '__main__':
+    if ENABLE_LOGGING:
+        setup_logging()  # Setup logging using the function from shared.logger
+
     # Start the Flask server in a new thread
     threading.Thread(target=run).start()
-    # Load the slash commands
+    # Load the slash commands and context menus
     bot.load_extension('bot.slash_commands')
     bot.load_extension('bot.context_menus')
     # Start the bot
