@@ -95,6 +95,16 @@ class UtilityCog(commands.Cog):
         embed.set_thumbnail(url=user.avatar.url)
         await interaction.response.send_message(embed=embed)
 
+    @bot.slash_command(name="messagecount", description="Get a user's message count")
+    @commands.has_any_role(*STAFF_ROLES)
+    async def message_count(self, interaction):
+        user_id = str(interaction.user.id)
+        self.cursor.execute("SELECT MessageCount FROM UserMessages WHERE UserID=?", (user_id,))
+        result = self.cursor.fetchone()
+        if result is None:
+            await interaction.response.send_message(f"{interaction.user.name}'s message count is 0.")
+        else:
+            await interaction.response.send_message(f"{interaction.user.name}'s message count is {result[0]}.")
 
 def setup(bot):
     """
