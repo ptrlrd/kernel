@@ -134,6 +134,7 @@ class RoadmapEmbedView(View):
         super().__init__(timeout=None)
         self.embeds = embeds
         self.current = 0
+        self.add_item(Button(label="View Full Roadmap", style=ButtonStyle.link, url="https://roadmap.sh/devops"))
 
     @ui.button(label="Back to Beginning", style=ButtonStyle.grey)
     async def back_to_beginning_button(self, button: Button, interaction: Interaction):
