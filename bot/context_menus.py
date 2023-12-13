@@ -1,10 +1,11 @@
 import asyncio
+
 import nextcord
-from nextcord import Message, Interaction, ButtonStyle
+from nextcord import Message, Interaction
 from nextcord.ext import commands
-from shared.config import EMPLOYMENT_CHANNEL_ID, SHOWCASE_CHANNEL_ID, HELP_FORUM_CHANNEL_ID, STAFF_ROLES
-from nextcord.ui import Button, View
+
 from bot.bot import bot
+from shared.config import EMPLOYMENT_CHANNEL_ID, SHOWCASE_CHANNEL_ID, HELP_FORUM_CHANNEL_ID, STAFF_ROLES
 
 
 class MessageManagementCog(commands.Cog):
@@ -94,70 +95,16 @@ class MessageManagementCog(commands.Cog):
         """
         await self.handle_command(interaction, message, HELP_FORUM_CHANNEL_ID)
 
-    @bot.message_command(name="Send Devops Roadmap")
-    async def send_devops_roadmap(self, interaction: nextcord.Interaction, message: nextcord.Message):
+    @bot.message_command(name="Use the /roadmap command")
+    async def use_roadmap_command(self, interaction: Interaction, message: Message):
         """
-        Discord message command to send the DevOps Roadmap.
+        Discord message command to instruct users to use the /roadmap slash command.
 
         Args:
             interaction (Interaction): The interaction that triggered the command.
             message (Message): The message where the command was invoked.
         """
-        embeds = [
-            nextcord.Embed(title="What is DevOps?",
-                           description="DevOps is all about bringing developers and operations teams together to improve software delivery. The key focus areas are automation, infrastructure and monitoring."),
-            nextcord.Embed(title="Learn a Programming Language",
-                           description="Python, Go, Pick any Programming Language. You can pick any programming language. The purpose behind the language is to be able to write automation scripts to automate repetitive tasks."),
-            nextcord.Embed(title="Linux",
-                           description="Learn about the file system, package managers, managing services, checking logs, bash scripting, permissions, pipes output redirection, common tools for text manipulation process monitoring, networking tools, CLI editors etc. Pick Ubuntu if you have a little to no experience."),
-            nextcord.Embed(title="Networking and Protocols",
-                           description="Learn about DNS, TCP/IP Protocols, SSH, ports, gateways, routing, ip addressing, and subnetting etc. This will come in handy with deployments / troubleshooting."),
-            nextcord.Embed(title="Docker",
-                           description="Learn about containerization. Be comfortable writing Docker files. Learn about troubleshooting. Get familiar with Alpine Linux. Learn about networking, storage, security. Learn docker networking, storage, security, performance."),
-            nextcord.Embed(title="Git",
-                           description="DevOps teams usually practice 'git ops,' i.e., making changes to your CI/CD pipeline, infrastructure, or server provisioning will involve making a pull request against the appropriate git repository. Learn about git, create your GitHub profile."),
-            nextcord.Embed(title="Learn the Cloud",
-                           description="Pick one of the cloud providers AWS, GCP or Azure. Start with core services e.g. in AWS VPC, EC2, S3, IAM and later RDS, Route53, Cloudwatch, ECS, etc. Create and deploy some dummy application to the cloud."),
-            nextcord.Embed(title="Terraform",
-                           description="Learn what 'Infrastructure as Code' means. Learn about terraform and how to automate infrastructure creation. If you deployed an application to AWS in previous step destroy the infrastructure and create it using terraform."),
-            nextcord.Embed(title="Ansible",
-                           description="Learn what is configuration management. Understand roles, playbooks, inventory management and automation. Write some automation scripts e.g. db backups."),
-            nextcord.Embed(title="GitHub Actions",
-                           description="Learn about the concepts of CI/CD and how to implement in your projects using some CI/CD tool. There are several options available in this space, you can pick any one. Integrate CI/CD into your apps using GitHub Actions."),
-            nextcord.Embed(title="Nginx",
-                           description="nginx is commonly used for web serving, reverse proxying, caching, load balancing, media streaming, and more. Learn the basic config options, TLS setup etc."),
-            nextcord.Embed(title="Job Ready",
-                           description="At this point, you should have enough knowledge to find a junior to mid-level (maybe even senior) DevOps position at any company depending on the depth of your knowledge. Deepen your pool of knowledge and keep building projects till you find a job. Your job will teach you a lot as well. Continue learning at https://roadmap.sh/devops.")
-        ]
-        view = RoadmapEmbedView(embeds)
-        await interaction.response.send_message(embed=embeds[0], view=view)
-
-
-class RoadmapEmbedView(View):
-    def __init__(self, embeds):
-        super().__init__(timeout=None)
-        self.embeds = embeds
-        self.current = 0
-        self.add_item(Button(style=ButtonStyle.grey, emoji="⬅️", custom_id="previous", disabled=True))
-        self.add_item(Button(style=ButtonStyle.grey, emoji="➡️", custom_id="next"))
-
-    @nextcord.ui.button(label="Previous", style=ButtonStyle.blurple, disabled=True)
-    async def previous_button(self, button: Button, interaction: Interaction):
-        if self.current > 0:
-            self.current -= 1
-            if self.current == 0:
-                button.disabled = True
-            await interaction.response.edit_message(embed=self.embeds[self.current], view=self)
-        self.children[1].disabled = False  # Enable the 'next' button
-
-    @nextcord.ui.button(label="Next", style=ButtonStyle.blurple)
-    async def next_button(self, button: Button, interaction: Interaction):
-        if self.current < len(self.embeds) - 1:
-            self.current += 1
-            if self.current == len(self.embeds) - 1:
-                button.disabled = True
-            await interaction.response.edit_message(embed=self.embeds[self.current], view=self)
-        self.children[0].disabled = False  # Enable the 'previous' button
+        await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
 
 
 def setup(bot):
