@@ -126,14 +126,14 @@ class RoadmapEmbedView(View):
         self.add_item(Button(label="Previous", style=ButtonStyle.blurple, disabled=True))
         self.add_item(Button(label="Next", style=ButtonStyle.blurple))
 
-    @bot.ui.button(label="Back to Beginning", style=ButtonStyle.grey)
+    @ui.button(label="Back to Beginning", style=ButtonStyle.grey)
     async def back_to_beginning_button(self, button: Button, interaction: Interaction):
         self.current = 0
         self.children[1].disabled = True
         self.children[2].disabled = False
         await interaction.response.edit_message(embed=self.embeds[0], view=self)
 
-    @bot.ui.button(label="Previous", style=ButtonStyle.blurple, disabled=True)
+    @ui.button(label="Previous", style=ButtonStyle.blurple, disabled=True)
     async def previous_button(self, button: Button, interaction: Interaction):
         if self.current > 0:
             self.current -= 1
@@ -141,13 +141,14 @@ class RoadmapEmbedView(View):
             self.children[2].disabled = False
         self.children[1].disabled = self.current == 0
 
-    @bot.ui.button(label="Next", style=ButtonStyle.blurple)
+    @ui.button(label="Next", style=ButtonStyle.blurple)
     async def next_button(self, button: Button, interaction: Interaction):
         if self.current < len(self.embeds) - 1:
             self.current += 1
             await interaction.response.edit_message(embed=self.embeds[self.current], view=self)
             self.children[1].disabled = False
         self.children[2].disabled = self.current == len(self.embeds) - 1
+
 
 
 def setup(bot):
