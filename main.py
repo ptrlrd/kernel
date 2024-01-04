@@ -19,5 +19,6 @@ if __name__ == '__main__':
     # Load the slash commands and context menus
     bot.load_extension('bot.slash_commands')
     bot.load_extension('bot.context_menus')
+    bot.load_extension('bot.news_feed.py')
     # Start the bot
     bot.run(DISCORD_TOKEN)
