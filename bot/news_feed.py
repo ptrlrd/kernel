@@ -77,7 +77,7 @@ class RSSFeedCog(commands.Cog):
                     self.latest_titles[link] = True  # Mark this link as posted
                     self.save_latest_urls()
 
-                    message_text = f"Posting from *{feed_title}* : [link]({link})"
+                    message_text = f"Posting from *{feed_title}* - {link}"
                     message = await channel.send(message_text)
 
                     await message.add_reaction("👍")
