@@ -21,31 +21,32 @@ class RSSFeedCog(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def check_feeds(self):
+        print("Checking feeds...")  # Debug print
         channel = await self.get_channel()
         if channel is None:
+            print("Channel not found!")  # Debug print
             return
 
         current_time = datetime.datetime.now(datetime.timezone.utc)
 
         for url in self.feed_urls:
-            feed = feedparser.parse(url)
-            if feed.bozo:  # bozo bit is set when feed parsing fails
-                continue
+            try:
+                feed = feedparser.parse(url)
+                if feed.bozo:
+                    print(f"Error parsing feed: {url}")  # Debug print
+                    continue
 
-            for entry in feed.entries:
-                published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
-                if (current_time - published).total_seconds() < self.time_window:
-                    feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
-                    link = entry.get('link', '')
-                    message_text = f"Posting from *{feed_title}* : {link}"
-
-                    try:
-                        message = await channel.send(message_text)
-                        await message.add_reaction("👍")
-                        await message.add_reaction("👎")
-                    except nextcord.HTTPException:
-                        # Handle exceptions for sending messages or adding reactions
-                        pass
+                for entry in feed.entries:
+                    published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
+                    if (current_time - published).total_seconds() < self.time_window:
+                        feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
+                        link = entry.get('link', '')
+                        message_text = f"Posting from *{feed_title}* : {link}"
+                        print(f"Sending message: {message_text}")  # Debug print
+                        await channel.send(message_text)
+                        # ... Reaction adding code ...
+            except Exception as e:
+                print(f"An error occurred: {e}")  # Debug print
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
