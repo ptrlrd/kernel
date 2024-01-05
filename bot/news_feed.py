@@ -30,12 +30,6 @@ def strip_tags(html):
     return s.get_data()
 
 
-class LinkButton(nextcord.ui.View):
-    def __init__(self, url):
-        super().__init__()
-        self.add_item(nextcord.ui.Button(style=ButtonStyle.url, label="Link to Article", url=url))
-
-
 class RSSFeedCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -63,28 +57,37 @@ class RSSFeedCog(commands.Cog):
 
         for url in self.feed_urls:
             feed = feedparser.parse(url)
-            latest_entry = feed.entries[0] if feed.entries else None
 
-            if latest_entry:
-                title = latest_entry.get('title', 'No Title')
-                link = latest_entry.get('link', '')
-                description = strip_tags(latest_entry.get('summary', 'No Description'))
-                pub_date = latest_entry.get('published', '')
+            for entry in feed.entries:
+                should_post = False
 
-                if url not in self.latest_titles or self.latest_titles[url] != title:
-                    self.latest_titles[url] = title
-                    self.save_latest_titles()
+                # Determine the feed's title
+                feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
 
-                    embed = nextcord.Embed(
-                        title=title,
-                        url=link,
-                        description=description,
-                        timestamp=datetime.datetime.now()
-                    )
-                    embed.set_footer(text=f"Published on {pub_date}")
-                    view = LinkButton(link)
+                # Apply filtering logic based on feed title
+                if "Hacker News" in feed_title:
+                    should_post = True
+                elif "Ars Technica" in feed_title:
+                    if 'category' in entry:
+                        categories = entry.category if isinstance(entry.category, list) else [entry.category]
+                        should_post = 'Tech' in categories
 
-                    await channel.send(embed=embed, view=view)
+                if should_post:
+                    post_title = entry.get('title', 'No Title')
+                    link = entry.get('link', '')
+
+                    message_text = f"Posting from *{feed_title}* : [link]({link})"
+
+                    if url not in self.latest_titles or self.latest_titles[url] != post_title:
+                        self.latest_titles[url] = post_title
+                        self.save_latest_titles()
+
+                        # Send the message
+                        message = await channel.send(message_text)
+
+                        # Add reactions for thumbs up and thumbs down
+                        await message.add_reaction("👍")
+                        await message.add_reaction("👎")
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
