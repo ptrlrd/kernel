@@ -11,4 +11,8 @@ HELP_FORUM_CHANNEL_ID = 1105521800814801037
 STAFF_ROLES = ["Staff", "Senior Staff", "Root"]
 NEWS_CHANNEL_ID = 1192897903656714391
 ENABLE_LOGGING = False  # Switch to True to enable logging
-RSS_FEED_URLS = ["https://hnrss.org/frontpage", "https://www.databreaches.net/feed"]
+RSS_FEED_URLS = ["https://hnrss.org/frontpage",
+                 "https://www.databreaches.net/feed",
+                 "https://www.reddit.com/r/netsec/.rss",
+                 "https://www.reddit.com/r/privacy/.rss",]
+
