@@ -3,6 +3,28 @@ from nextcord.ext import tasks, commands
 import feedparser
 import datetime
 from shared.config import NEWS_CHANNEL_ID, RSS_FEED_URLS
+from html.parser import HTMLParser
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs = True
+        self.text = []
+
+    def handle_data(self, d):
+        self.text.append(d)
+
+    def get_data(self):
+        return ''.join(self.text)
+
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 
 class RSSFeedCog(commands.Cog):
@@ -10,43 +32,30 @@ class RSSFeedCog(commands.Cog):
         self.bot = bot
         self.feed_urls = RSS_FEED_URLS
         self.channel_id = NEWS_CHANNEL_ID
-        self.time_window = 60  # Time window in seconds
-        self.channel = None
+        self.time_window = 60
         self.check_feeds.start()
-
-    async def get_channel(self):
-        if not self.channel:
-            self.channel = self.bot.get_channel(self.channel_id)
-        return self.channel
 
     @tasks.loop(minutes=1)
     async def check_feeds(self):
-        channel = await self.get_channel()
+        channel = self.bot.get_channel(self.channel_id)
         if channel is None:
-            print("Channel not found.")
             return
 
         current_time = datetime.datetime.now(datetime.timezone.utc)
 
         for url in self.feed_urls:
-            try:
-                feed = feedparser.parse(url)
-                if feed.bozo:
-                    print(f"Failed to parse feed: {url}")
-                    continue
+            feed = feedparser.parse(url)
 
-                for entry in feed.entries:
-                    published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
-                    if (current_time - published).total_seconds() < self.time_window:
-                        feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
-                        link = entry.get('link', '')
-                        message_text = f"Posting from *{feed_title}* : {link}"
-                        print(f"Attempting to post: {message_text}")  # Logging message
-                        message = await channel.send(message_text)
-                        await message.add_reaction("👍")
-                        await message.add_reaction("👎")
-            except Exception as e:
-                print(f"An error occurred: {e}")
+            for entry in feed.entries:
+                published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
+                if (current_time - published).total_seconds() < self.time_window:
+                    feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
+                    link = entry.get('link', '')
+                    message_text = f"Posting from *{feed_title}* : {link}"
+                    message = await channel.send(message_text)
+
+                    await message.add_reaction("👍")
+                    await message.add_reaction("👎")
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
