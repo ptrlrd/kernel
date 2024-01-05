@@ -3,6 +3,7 @@ from nextcord.ext import tasks, commands
 import feedparser
 import datetime
 from shared.config import NEWS_CHANNEL_ID, RSS_FEED_URLS
+from html.parser import HTMLParser
 
 class MLStripper(HTMLParser):
     def __init__(self):
