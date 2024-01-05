@@ -3,8 +3,6 @@ from nextcord.ext import tasks, commands
 import feedparser
 import datetime
 from shared.config import NEWS_CHANNEL_ID, RSS_FEED_URLS
-from html.parser import HTMLParser
-
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -20,19 +18,17 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.text)
 
-
 def strip_tags(html):
     s = MLStripper()
     s.feed(html)
     return s.get_data()
-
 
 class RSSFeedCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.feed_urls = RSS_FEED_URLS
         self.channel_id = NEWS_CHANNEL_ID
-        self.time_window = 60
+        self.time_window = 60  # Time window in seconds to consider a publication as new
         self.check_feeds.start()
 
     @tasks.loop(minutes=1)
@@ -60,7 +56,6 @@ class RSSFeedCog(commands.Cog):
     @check_feeds.before_loop
     async def before_check_feeds(self):
         await self.bot.wait_until_ready()
-
 
 def setup(bot):
     bot.add_cog(RSSFeedCog(bot))
