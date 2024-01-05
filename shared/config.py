@@ -13,6 +13,7 @@ NEWS_CHANNEL_ID = 1192897903656714391
 ENABLE_LOGGING = False  # Switch to True to enable logging
 RSS_FEED_URLS = ["https://hnrss.org/frontpage",
                  "https://www.databreaches.net/feed",
-                 "https://www.reddit.com/r/netsec/.rss",
-                 "https://www.reddit.com/r/privacy/.rss",]
+                 "https://feeds.arstechnica.com/arstechnica/technology-lab",
+                 "https://www.schneier.com/blog/atom.xml",
+                 ]
 
