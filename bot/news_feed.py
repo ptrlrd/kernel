@@ -39,6 +39,16 @@ class RSSFeedCog(commands.Cog):
         self.channel_id = NEWS_CHANNEL_ID
         self.check_feeds.start()
 
+    def load_latest_titles(self):
+        if os.path.exists(self.latest_titles_file):
+            with open(self.latest_titles_file, "r") as file:
+                return json.load(file)
+        return {}
+
+    def save_latest_titles(self):
+        with open(self.latest_titles_file, "w") as file:
+            json.dump(self.latest_titles, file, indent=4)
+
     def load_latest_urls(self):
         if os.path.exists(self.latest_titles_file):
             with open(self.latest_titles_file, "r") as file:
@@ -62,9 +72,6 @@ class RSSFeedCog(commands.Cog):
                 should_post = False
                 feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
 
-                # Logic to determine whether to post the entry
-                # ...
-
                 link = entry.get('link', '')
                 if link and (link not in self.latest_titles):
                     self.latest_titles[link] = True  # Mark this link as posted
@@ -73,7 +80,6 @@ class RSSFeedCog(commands.Cog):
                     message_text = f"Posting from *{feed_title}* : [link]({link})"
                     message = await channel.send(message_text)
 
-                    # Add reactions for thumbs up and thumbs down
                     await message.add_reaction("👍")
                     await message.add_reaction("👎")
 
