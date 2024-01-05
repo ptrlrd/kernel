@@ -1,9 +1,6 @@
 import nextcord
 from nextcord.ext import tasks, commands
-from nextcord import Interaction, ButtonStyle
 import feedparser
-import json
-import os
 import datetime
 from shared.config import NEWS_CHANNEL_ID, RSS_FEED_URLS
 from html.parser import HTMLParser
@@ -59,34 +56,38 @@ class RSSFeedCog(commands.Cog):
         with open(self.latest_titles_file, "w") as file:
             json.dump(self.latest_titles, file, indent=4)
 
-    @tasks.loop(minutes=1)
-    async def check_feeds(self):
-        channel = self.bot.get_channel(self.channel_id)
-        if channel is None:
-            return
+    class RSSFeedCog(commands.Cog):
+        def __init__(self, bot):
+            self.bot = bot
+            self.feed_urls = RSS_FEED_URLS
+            self.channel_id = NEWS_CHANNEL_ID
+            self.check_feeds.start()
 
-        for url in self.feed_urls:
-            feed = feedparser.parse(url)
+        @tasks.loop(minutes=1)
+        async def check_feeds(self):
+            channel = self.bot.get_channel(self.channel_id)
+            if channel is None:
+                return
 
-            for entry in feed.entries:
-                should_post = False
-                feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
+            current_time = datetime.datetime.now(datetime.timezone.utc)
 
-                link = entry.get('link', '')
-                if link and (link not in self.latest_titles):
-                    self.latest_titles[link] = True  # Mark this link as posted
-                    self.save_latest_urls()
+            for url in self.feed_urls:
+                feed = feedparser.parse(url)
 
-                    message_text = f"Posting from *{feed_title}* - {link}"
-                    message = await channel.send(message_text)
+                for entry in feed.entries:
+                    published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
+                    if (current_time - published).total_seconds() < 60:  # Check if published in the last minute
+                        feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
+                        link = entry.get('link', '')
+                        message_text = f"Posting from *{feed_title}* : {link}"
+                        message = await channel.send(message_text)
 
-                    await message.add_reaction("👍")
-                    await message.add_reaction("👎")
+                        await message.add_reaction("👍")
+                        await message.add_reaction("👎")
 
-    @check_feeds.before_loop
-    async def before_check_feeds(self):
-        await self.bot.wait_until_ready()
+        @check_feeds.before_loop
+        async def before_check_feeds(self):
+            await self.bot.wait_until_ready()
 
-
-def setup(bot):
-    bot.add_cog(RSSFeedCog(bot))
+    def setup(bot):
+        bot.add_cog(RSSFeedCog(bot))
