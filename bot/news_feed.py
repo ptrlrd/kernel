@@ -75,25 +75,19 @@ class RSSFeedCog(commands.Cog):
                 if should_post:
                     post_title = entry.get('title', 'No Title')
                     link = entry.get('link', '')
-                    description = strip_tags(entry.get('summary', 'No Description'))
-                    pub_date = entry.get('published', '')
 
-                    # Combine feed title with post title
-                    combined_title = f"{feed_title} - {post_title}"
+                    message_text = f"Posting from *{feed_title}* : [link]({link})"
 
-                    if url not in self.latest_titles or self.latest_titles[url] != combined_title:
-                        self.latest_titles[url] = combined_title
+                    if url not in self.latest_titles or self.latest_titles[url] != post_title:
+                        self.latest_titles[url] = post_title
                         self.save_latest_titles()
 
-                        embed = nextcord.Embed(
-                            title=combined_title,
-                            url=link,
-                            description=description,
-                            timestamp=datetime.datetime.now()
-                        )
-                        embed.set_footer(text=f"Published on {pub_date}")
+                        # Send the message
+                        message = await channel.send(message_text)
 
-                        await channel.send(embed=embed)
+                        # Add reactions for thumbs up and thumbs down
+                        await message.add_reaction("👍")
+                        await message.add_reaction("👎")
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
