@@ -21,10 +21,9 @@ class RSSFeedCog(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def check_feeds(self):
-        print("Checking feeds...")  # Debug print
         channel = await self.get_channel()
         if channel is None:
-            print("Channel not found!")  # Debug print
+            print("Channel not found.")
             return
 
         current_time = datetime.datetime.now(datetime.timezone.utc)
@@ -33,7 +32,7 @@ class RSSFeedCog(commands.Cog):
             try:
                 feed = feedparser.parse(url)
                 if feed.bozo:
-                    print(f"Error parsing feed: {url}")  # Debug print
+                    print(f"Failed to parse feed: {url}")
                     continue
 
                 for entry in feed.entries:
@@ -42,11 +41,12 @@ class RSSFeedCog(commands.Cog):
                         feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
                         link = entry.get('link', '')
                         message_text = f"Posting from *{feed_title}* : {link}"
-                        print(f"Sending message: {message_text}")  # Debug print
-                        await channel.send(message_text)
-                        # ... Reaction adding code ...
+                        print(f"Attempting to post: {message_text}")  # Logging message
+                        message = await channel.send(message_text)
+                        await message.add_reaction("👍")
+                        await message.add_reaction("👎")
             except Exception as e:
-                print(f"An error occurred: {e}")  # Debug print
+                print(f"An error occurred: {e}")
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
