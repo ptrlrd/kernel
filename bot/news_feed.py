@@ -39,13 +39,13 @@ class RSSFeedCog(commands.Cog):
         self.channel_id = NEWS_CHANNEL_ID
         self.check_feeds.start()
 
-    def load_latest_titles(self):
+    def load_latest_urls(self):
         if os.path.exists(self.latest_titles_file):
             with open(self.latest_titles_file, "r") as file:
                 return json.load(file)
         return {}
 
-    def save_latest_titles(self):
+    def save_latest_urls(self):
         with open(self.latest_titles_file, "w") as file:
             json.dump(self.latest_titles, file, indent=4)
 
@@ -60,34 +60,22 @@ class RSSFeedCog(commands.Cog):
 
             for entry in feed.entries:
                 should_post = False
-
-                # Determine the feed's title
                 feed_title = feed.feed.title if 'title' in feed.feed else 'Unknown Feed'
 
-                # Apply filtering logic based on feed title
-                if "Hacker News" in feed_title:
-                    should_post = True
-                elif "Ars Technica" in feed_title:
-                    if 'category' in entry:
-                        categories = entry.category if isinstance(entry.category, list) else [entry.category]
-                        should_post = 'Tech' in categories
+                # Logic to determine whether to post the entry
+                # ...
 
-                if should_post:
-                    post_title = entry.get('title', 'No Title')
-                    link = entry.get('link', '')
+                link = entry.get('link', '')
+                if link and (link not in self.latest_titles):
+                    self.latest_titles[link] = True  # Mark this link as posted
+                    self.save_latest_urls()
 
                     message_text = f"Posting from *{feed_title}* : [link]({link})"
+                    message = await channel.send(message_text)
 
-                    if url not in self.latest_titles or self.latest_titles[url] != post_title:
-                        self.latest_titles[url] = post_title
-                        self.save_latest_titles()
-
-                        # Send the message
-                        message = await channel.send(message_text)
-
-                        # Add reactions for thumbs up and thumbs down
-                        await message.add_reaction("👍")
-                        await message.add_reaction("👎")
+                    # Add reactions for thumbs up and thumbs down
+                    await message.add_reaction("👍")
+                    await message.add_reaction("👎")
 
     @check_feeds.before_loop
     async def before_check_feeds(self):
