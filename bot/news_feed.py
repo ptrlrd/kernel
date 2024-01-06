@@ -1,42 +1,16 @@
-import logging
-import asyncio
+import nextcord
 from nextcord.ext import tasks, commands
 import feedparser
 import datetime
-from shared.config import NEWS_CHANNEL_ID, ERROR_LOG_CHANNEL_ID, RSS_FEED_URLS
-
-class DiscordLoggingHandler(logging.Handler):
-    def __init__(self, bot, channel_id):
-        super().__init__()
-        self.bot = bot
-        self.channel_id = channel_id
-
-    def emit(self, record):
-        msg = self.format(record)
-        asyncio.create_task(self.send_to_discord(msg))
-
-    async def send_to_discord(self, msg):
-        channel = self.bot.get_channel(self.channel_id)
-        if channel:
-            await channel.send(f"```\n{msg}\n```")
+from shared.config import NEWS_CHANNEL_ID, RSS_FEED_URLS
 
 class RSSFeedCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.feed_urls = RSS_FEED_URLS
         self.channel_id = NEWS_CHANNEL_ID
-        self.error_log_channel_id = ERROR_LOG_CHANNEL_ID
-        self.time_window = 360
+        self.time_window = 360  # Time window in seconds to consider a publication as new
         self.check_feeds.start()
-        self.setup_logging()
-
-    def setup_logging(self):
-        logger = logging.getLogger()
-        logger.setLevel(logging.ERROR)
-        handler = DiscordLoggingHandler(self.bot, self.error_log_channel_id)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
 
     @tasks.loop(minutes=1)
     async def check_feeds(self):
@@ -48,6 +22,7 @@ class RSSFeedCog(commands.Cog):
 
         for url in self.feed_urls:
             feed = feedparser.parse(url)
+
             for entry in feed.entries:
                 published = datetime.datetime(*entry.published_parsed[:6], tzinfo=datetime.timezone.utc)
                 if (current_time - published).total_seconds() < self.time_window:
