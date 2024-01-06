@@ -13,8 +13,8 @@ NEWS_CHANNEL_ID = 1193004023679291452
 ERROR_LOG_CHANNEL_ID = 1175503125864513546
 ENABLE_LOGGING = False  # Switch to True to enable logging
 RSS_FEED_URLS = ["https://hnrss.org/frontpage",
-                 "https://www.databreaches.net/feed",
-                 "https://feeds.arstechnica.com/arstechnica/technology-lab",
-                 "https://www.schneier.com/blog/atom.xml",
+                 # "https://www.databreaches.net/feed",
+                 # "https://feeds.arstechnica.com/arstechnica/technology-lab",
+                 # "https://www.wired.com/feed/rss",
                  ]
 
