@@ -4,3 +4,6 @@ requests
 python-dotenv
 asyncio
 feedparser
+json
+os
+re
