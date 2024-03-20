@@ -4,5 +4,3 @@ requests
 python-dotenv
 asyncio
 feedparser
-os
-re
