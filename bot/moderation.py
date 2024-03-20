@@ -65,7 +65,6 @@ class ModerationCog(commands.Cog):
         await interaction.response.defer(ephemeral=True)  # Acknowledge the command interaction
         banned_users = self.get_banned_users()
         count = 0
-        # Assuming the bot is in a single guild, directly access the members
         for member in interaction.guild.members:
             for pattern in banned_users:
                 if re.match(pattern, member.name):
