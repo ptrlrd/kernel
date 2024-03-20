@@ -48,16 +48,31 @@ class ModerationCog(commands.Cog):
                 await member.ban(reason="Matched banned pattern.")
                 break
 
-    @tasks.loop(hours=24)
-    async def routine_check(self):
+    @tasks.loop(hours=12)
+    async def routine_check(self, interaction: nextcord.Interaction):
         """Performs a daily check on all server members against the banned username patterns."""
         banned_users = self.get_banned_users()
-        for guild in self.bot.guilds:
-            for member in guild.members:
-                for pattern in banned_users:
-                    if re.match(pattern, member.name):
-                        await member.ban(reason="Routine check: Matched banned pattern.")
-                        break
+        for member in interaction.guild.members:
+            for pattern in banned_users:
+                if re.match(pattern, member.name):
+                    await member.ban(reason="Routine check: Matched banned pattern.")
+                    break
+
+    @bot.slash_command(name="force_bot_check", description="Performs an immediate check of all members against the ban list.")
+    @commands.has_any_role(*STAFF_ROLES)
+    async def force_check(self, interaction: nextcord.Interaction):
+        """Performs an immediate check against all members for banned username patterns."""
+        await interaction.response.defer(ephemeral=True)  # Acknowledge the command interaction
+        banned_users = self.get_banned_users()
+        count = 0
+        # Assuming the bot is in a single guild, directly access the members
+        for member in interaction.guild.members:
+            for pattern in banned_users:
+                if re.match(pattern, member.name):
+                    await member.ban(reason="Ad-hoc check: Matched banned pattern.")
+                    count += 1
+                    break  # Break to avoid multiple checks if multiple patterns match
+        await interaction.followup.send(f"Ad-hoc check completed. Banned {count} user(s) matching the patterns.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(ModerationCog(bot))
