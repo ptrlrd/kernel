@@ -9,6 +9,9 @@ jobs:
   saved-banned-users:
     runs-on: self-hosted
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Configure Git
         run: |
           git config --global user.name '${{ secrets.GIT_USER_NAME }}'
