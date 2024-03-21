@@ -11,7 +11,7 @@ HELP_FORUM_CHANNEL_ID = 1105521800814801037
 STAFF_ROLES = ["senior sudo", "sudo", "root", 99656376954916864, 931176500252782592, 1134275955431571486]
 NEWS_CHANNEL_ID = 1193404886226845816
 ERROR_LOG_CHANNEL_ID = 1175503125864513546
-ENABLE_LOGGING = True  # Switch to True to enable logging
+ENABLE_LOGGING = False  # Switch to True to enable logging
 TESTING_MODE = False
 RSS_FEED_URLS = ["https://hnrss.org/frontpage",
                  "https://www.databreaches.net/feed",
