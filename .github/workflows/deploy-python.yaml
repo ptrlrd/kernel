@@ -9,6 +9,9 @@ jobs:
   saved-banned-users:
     runs-on: self-hosted
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Configure Git
         run: |
           git config --global user.name '${{ secrets.GIT_USER_NAME }}'
@@ -16,13 +19,10 @@ jobs:
 
       - name: Commit banned_users.json
         run: |
-          git fetch origin ${GITHUB_REF}:refs/remotes/origin/${GITHUB_REF}
-          git checkout ${GITHUB_REF}
-          git status --porcelain | grep 'data/banned_users.json'
-          if [ $? -eq 0 ]; then
+          if git status --porcelain | grep 'data/banned_users.json'; then
             git add data/banned_users.json
             git commit -m "Automatically update banned_users.json"
-            git push origin HEAD:${GITHUB_REF}
+            git push
           else
             echo "No changes in banned_users.json"
 
