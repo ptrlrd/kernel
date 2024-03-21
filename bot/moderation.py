@@ -17,9 +17,9 @@ class ModerationCog(commands.Cog):
     def get_banned_users(self):
         """Checks for the existence of the banned_users.json file or creates it."""
         if not os.path.exists('banned_users.json'):
-            with open('banned_users.json', 'w') as file:
+            with open('./data/banned_users.json', 'w') as file:
                 json.dump([], file)
-        with open('banned_users.json', 'r') as file:
+        with open('./data/banned_users.json', 'r') as file:
             return json.load(file)
 
     def save_banned_users(self, data):
