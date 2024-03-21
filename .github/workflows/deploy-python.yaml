@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  save-banned-users:
+  saved-banned-users:
     runs-on: self-hosted
     steps:
       - name: Checkout Repository
