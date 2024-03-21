@@ -25,6 +25,7 @@ jobs:
             git push
           else
             echo "No changes in banned_users.json"
+          fi
 
   build-and-deploy:
     runs-on: self-hosted
