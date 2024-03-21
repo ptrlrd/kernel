@@ -64,12 +64,32 @@ class ModerationCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        """Checks joining members against the banned username patterns and bans if matched."""
-        banned_users = self.get_banned_users()
-        for pattern in banned_users:
-            if re.match(pattern, member.name):
-                await member.ban(reason="Matched banned pattern.")
-                break
+        # This regex matches usernames with letters followed by an underscore and digits
+        pattern = re.compile(r'^[a-zA-Z]+_\d+$')
+        if pattern.match(member.name):
+            channel = self.bot.get_channel(1105538041021472900)  # Make sure the ID is correct
+            view = BanConfirmationView(member.name.split('_')[0] + '_\d+')  # Note the pattern change here for display purposes
+
+            # Send the confirmation message with buttons
+            message_text = f"Would you like to add the pattern for `{member.name.split('_')[0]}` followed by any number of digits to the bot ban list?"
+            message = await channel.send(message_text, view=view)
+
+            # Wait for the View to stop listening for interaction
+            await view.wait()
+            if view.value is True:
+                # Add pattern to ban list and update JSON if confirmed
+                banned_users = self.get_banned_users()
+                new_pattern = member.name.split('_')[0] + '_\\d+'  # This is how you represent the pattern in the list
+                if new_pattern not in banned_users:
+                    banned_users.append(new_pattern)
+                    self.save_banned_users(banned_users)
+                    await message.edit(content=f"Pattern `{new_pattern}` added to banned list.", view=None)
+                else:
+                    await message.edit(content=f"Pattern `{new_pattern}` is already in the banned list.", view=None)
+            elif view.value is False:
+                # If declined, update the message
+                await message.edit(content="Pattern addition cancelled.", view=None)
+
 
     @tasks.loop(hours=12)
     async def routine_check(self, interaction: nextcord.Interaction):
@@ -95,6 +115,22 @@ class ModerationCog(commands.Cog):
                     count += 1
                     break  # Break to avoid multiple checks if multiple patterns match
         await interaction.followup.send(f"Ad-hoc check completed. Banned {count} user(s) matching the patterns.", ephemeral=True)
+
+class BanConfirmationView(nextcord.ui.View):
+    def __init__(self, pattern, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pattern = pattern
+        self.value = None  # To track the staff's decision
+
+@nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green, emoji='👍')
+async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+    self.value = True
+    self.stop()
+
+@nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red, emoji='👎')
+async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+    self.value = False
+    self.stop()
 
 def setup(bot):
     bot.add_cog(ModerationCog(bot))
