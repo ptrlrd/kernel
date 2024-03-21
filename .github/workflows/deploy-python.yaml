@@ -23,7 +23,7 @@ jobs:
             git commit -m "Automatically update banned_users.json"
           
             # Using the token directly in the HTTPS URL for push
-            git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/${{ secrets.GIT_USER_NAME }}/Kernel.git
+            git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/${{ secrets.GIT_USER_NAME }}/kernel.git
             git push --set-upstream origin $(git branch --show-current)
           
           else
