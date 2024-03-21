@@ -9,9 +9,6 @@ jobs:
   saved-banned-users:
     runs-on: self-hosted
     steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v2
-
       - name: Configure Git
         run: |
           git config --global user.name '${{ secrets.GIT_USER_NAME }}'
@@ -19,10 +16,16 @@ jobs:
 
       - name: Commit banned_users.json
         run: |
+          # Configure Git to use HTTPS authentication using the PAT
+          git config --global credential.helper store
+          
+          # Before the first Git operation that requires authentication
+          echo "https://${{ secrets.GIT_TOKEN }}@github.com" > ~/.git-credentials
+          
           if git status --porcelain | grep 'data/banned_users.json'; then
             git add data/banned_users.json
             git commit -m "Automatically update banned_users.json"
-            git push
+            git push --set-upstream https://github.com/USERNAME/REPOSITORY.git main
           else
             echo "No changes in banned_users.json"
           fi
