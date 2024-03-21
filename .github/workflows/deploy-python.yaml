@@ -16,10 +16,13 @@ jobs:
 
       - name: Commit banned_users.json
         run: |
-          if git status --porcelain | grep 'data/banned_users.json'; then
+          git fetch origin ${GITHUB_REF}:refs/remotes/origin/${GITHUB_REF}
+          git checkout ${GITHUB_REF}
+          git status --porcelain | grep 'data/banned_users.json'
+          if [ $? -eq 0 ]; then
             git add data/banned_users.json
             git commit -m "Automatically update banned_users.json"
-            git push
+            git push origin HEAD:${GITHUB_REF}
           else
             echo "No changes in banned_users.json"
 
