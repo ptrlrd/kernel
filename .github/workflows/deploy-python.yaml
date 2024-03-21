@@ -16,18 +16,17 @@ jobs:
 
       - name: Commit banned_users.json
         run: |
-          # Configure Git to use HTTPS authentication using the PAT
-          git config --global credential.helper store
-          
-          # Before the first Git operation that requires authentication
-          echo "https://${{ secrets.GIT_TOKEN }}@github.com" > ~/.git-credentials
-          
           if git status --porcelain | grep 'data/banned_users.json'; then
             git add data/banned_users.json
             git commit -m "Automatically update banned_users.json"
-            git push --set-upstream https://github.com/USERNAME/REPOSITORY.git main
+          
+            # Using the token directly in the HTTPS URL for push
+            git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/${{ secrets.GIT_USER_NAME }}/Kernel.git
+            git push --set-upstream origin $(git branch --show-current)
+          
           else
             echo "No changes in banned_users.json"
+
           fi
 
   build-and-deploy:
