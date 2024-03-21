@@ -8,8 +8,8 @@ services:
       - .env
     restart: always
     volumes:
-      - sqlite_data:/usr/src/app/data
-      - ./banned_users.json:/usr/src/app/banned_users.json   # New volume for bot data
+#      - sqlite_data:/usr/src/app/data
+      - ./data/:/usr/src/app/data   # New volume for bot data
 
-volumes:
-  sqlite_data:
+#volumes:
+#  sqlite_data:
