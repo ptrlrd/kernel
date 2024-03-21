@@ -39,6 +39,29 @@ class ModerationCog(commands.Cog):
         else:
             await interaction.response.send_message(f"Pattern `{pattern}` is already in the banned list.", ephemeral=True)
 
+    @bot.slash_command(name="remove_ban_pattern", description="Remove a username pattern from the ban list.")
+    @commands.has_any_role(*STAFF_ROLES)
+    async def remove_ban_pattern(self, interaction: nextcord.Interaction, pattern: str):
+        """Removes a username pattern from the banned list."""
+        banned_users = self.get_banned_users()
+        if pattern in banned_users:
+            banned_users.remove(pattern)
+            self.save_banned_users(banned_users)
+            await interaction.response.send_message(f"Pattern `{pattern}` removed from banned list.", ephemeral=True)
+        else:
+            await interaction.response.send_message(f"Pattern `{pattern}` is not in the banned list.", ephemeral=True)
+
+    @bot.slash_command(name="list_ban_patterns", description="List all username patterns in the ban list.")
+    @commands.has_any_role(*STAFF_ROLES)
+    async def list_ban_patterns(self, interaction: nextcord.Interaction):
+        """Lists all username patterns in the banned list."""
+        banned_users = self.get_banned_users()
+        if banned_users:
+            patterns = "\n".join(banned_users)
+            await interaction.response.send_message(f"Current banned patterns:\n```\n{patterns}\n```", ephemeral=True)
+        else:
+            await interaction.response.send_message("There are no patterns in the banned list.", ephemeral=True)
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         """Checks joining members against the banned username patterns and bans if matched."""
