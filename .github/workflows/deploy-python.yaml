@@ -3,6 +3,7 @@ name: Deploy Kernel on Self-hosted Server
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   save-banned-users:
