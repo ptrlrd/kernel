@@ -9,6 +9,7 @@ services:
     restart: always
     volumes:
       - sqlite_data:/usr/src/app/data
+      - ./banned_users.json:/usr/src/app/banned_users.json   # New volume for bot data
 
 volumes:
   sqlite_data:
