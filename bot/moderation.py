@@ -16,15 +16,18 @@ class ModerationCog(commands.Cog):
 
     def get_banned_users(self):
         """Checks for the existence of the banned_users.json file or creates it."""
-        if not os.path.exists('banned_users.json'):
-            with open('./data/banned_users.json', 'w') as file:
+        filepath = '/usr/src/app/data/banned_users.json'  # Adjusted path
+        if not os.path.exists(filepath):
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)  # Ensure directory exists
+            with open(filepath, 'w') as file:
                 json.dump([], file)
-        with open('./data/banned_users.json', 'r') as file:
+        with open(filepath, 'r') as file:
             return json.load(file)
 
     def save_banned_users(self, data):
         """Saves updated list of banned user patterns to the JSON file."""
-        with open('banned_users.json', 'w') as file:
+        filepath = '/usr/src/app/data/banned_users.json'  # Adjusted path
+        with open(filepath, 'w') as file:
             json.dump(data, file)
 
     @bot.slash_command(name="add_ban_pattern", description="Add a username pattern to ban list.")
