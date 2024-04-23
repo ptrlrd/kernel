@@ -1,4 +1,4 @@
-name: Deploy Kernel on Self-hosted Server
+name: Build and Push Kernel Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: self-hosted
     steps:
       - name: Checkout Repository
@@ -16,7 +16,7 @@ jobs:
         run: |
           git config --global user.name '${{ secrets.GIT_USER_NAME }}'
           git config --global user.email '${{ secrets.GIT_USER_EMAIL }}'
-          BRANCH_NAME=${GITHUB_REF#refs/heads/} || "main"
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}" || "main"
           git checkout $BRANCH_NAME
 
       - name: Commit banned_users.json
@@ -25,10 +25,9 @@ jobs:
             git add data/banned_users.json
             git commit -m "Automatically update banned_users.json"
             git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/${{ secrets.GIT_USER_NAME }}/kernel.git
-            git push --set-upstream origin $(git branch --show-current)
+            git push --set-upstream origin $BRANCH_NAME
           else
             echo "No changes in banned_users.json"
-          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -45,29 +44,6 @@ jobs:
           context: .
           push: true
           tags: ptrlrd/kernel:latest
-
-      - name: Create .env file for Docker Swarm
-        run: |
-          echo "DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}" > .env
-          echo "PREFIX=${{ secrets.PREFIX }}" >> .env
-
-      - name: Pull Latest Docker Image
-        run: docker pull ptrlrd/kernel:latest
-
-      - name: Deploy to Docker Swarm
-        run: |
-          docker service create \
-            --name kernel \
-            --env-file .env \
-            --replicas 1 \
-            --with-registry-auth \
-            --publish published=3000,target=3000 \
-            ptrlrd/kernel:latest \
-            || docker service update \
-              --env-file .env \
-              --force \
-              --image ptrlrd/kernel:latest \
-              kernel
 
       - name: Clean up old images
         run: docker image prune -a -f
