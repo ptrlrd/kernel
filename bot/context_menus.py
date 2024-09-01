@@ -115,7 +115,9 @@ class MessageManagementCog(commands.Cog):
             interaction (Interaction): The interaction that triggered the command.
             message (Message): The message where the command was invoked.
         """
-        await interaction.response.send_message("To use a slash command, type a forward-slash \"/\" in the chat bar and a list of commands will appear. Click on the one you want to use. For more information visit https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ.  https://support.discord.com/hc/article_attachments/1500003352961")
+        message_content = "To use a slash command, type a forward-slash \"/\" in the chat bar and a list of commands will appear. Click on the one you want to use. For more information visit https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ."
+        file = nextcord.File("../images/slashcommand.png", filename="slashcommand.png")
+        await interaction.response.send_message(content=message_content, file=file)
 
 
 def setup(bot):
