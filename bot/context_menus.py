@@ -3,6 +3,7 @@ import asyncio
 import nextcord
 from nextcord import Message, Interaction
 from nextcord.ext import commands
+import os
 
 from bot.bot import bot
 from shared.config import EMPLOYMENT_CHANNEL_ID, SHOWCASE_CHANNEL_ID, HELP_FORUM_CHANNEL_ID, STAFF_ROLES
@@ -116,8 +117,15 @@ class MessageManagementCog(commands.Cog):
             message (Message): The message where the command was invoked.
         """
         message_content = "To use a slash command, type a forward-slash \"/\" in the chat bar and a list of commands will appear. Click on the one you want to use. For more information visit https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ."
-        file = nextcord.File("../images/slashcommand.png", filename="slashcommand.png")
-        await interaction.response.send_message(content=message_content, file=file)
+        
+        # Check if the file exists before trying to send it
+
+        file_path = "../images/slashcommand.png"
+        if os.path.exists(file_path):
+            file = nextcord.File(file_path, filename="slashcommand.png")
+            await interaction.response.send_message(content=message_content, file=file)
+        else:
+            await interaction.response.send_message(content=message_content)
 
 
 def setup(bot):
