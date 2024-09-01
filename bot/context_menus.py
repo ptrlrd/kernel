@@ -120,7 +120,7 @@ class MessageManagementCog(commands.Cog):
         
         # Check if the file exists before trying to send it
 
-        file_path = "../images/slashcommand.png"
+        file_path = "/usr/src/app/images/slashcommand.png"
         if os.path.exists(file_path):
             file = nextcord.File(file_path, filename="slashcommand.png")
             await interaction.response.send_message(content=message_content, file=file)
