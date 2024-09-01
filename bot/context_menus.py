@@ -106,6 +106,20 @@ class MessageManagementCog(commands.Cog):
         """
         await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
 
+    @bot.message_command(name="How to use slash commands")
+    async def how_to_use_slash_command(self, interaction: Interaction, message: Message):
+        """
+        Discord message command to instruct users on how to use slash commands.
+
+        Args:
+            interaction (Interaction): The interaction that triggered the command.
+            message (Message): The message where the command was invoked.
+        """
+        await interaction.response.send_message(
+            "To use a slash command, type a forward-slash \"/\" in the chat bar and a list of commands will appear. Click on the one you want to use. For more information visit https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ.",
+            file=nextcord.File("https://support.discord.com/hc/article_attachments/1500003352961", filename="slash_commands_example.png")
+        )
+
 
 def setup(bot):
     bot.add_cog(MessageManagementCog(bot))

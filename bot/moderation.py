@@ -118,42 +118,42 @@ class ModerationCog(commands.Cog):
                     break  # Break to avoid multiple checks if multiple patterns match
         await interaction.followup.send(f"Ad-hoc check completed. Banned {count} user(s) matching the patterns.", ephemeral=True)
 
-class BanConfirmationView(nextcord.ui.View):
-    def __init__(self, pattern, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.pattern = pattern
-        self.value = None  # To track the staff's decision
+# class BanConfirmationView(nextcord.ui.View):
+#     def __init__(self, pattern, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.pattern = pattern
+#         self.value = None  # To track the staff's decision
 
-    @nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green, emoji='👍')
-    async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = True
-        self.stop()
+#     @nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green, emoji='👍')
+#     async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+#         self.value = True
+#         self.stop()
 
-    @nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red, emoji='👎')
-    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = False
-        self.stop()
+#     @nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red, emoji='👎')
+#     async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+#         self.value = False
+#         self.stop()
 
-    async def update_message(self, interaction: nextcord.Interaction, content: str, button_label: str):
-        # Create a new View with a disabled button
-        new_view = nextcord.ui.View()
-        button = nextcord.ui.Button(label=button_label, style=nextcord.ButtonStyle.grey, disabled=True)
-        new_view.add_item(button)
-        # Edit the original message with new content and the updated view
-        await interaction.message.edit(content=content, view=new_view)
+#     async def update_message(self, interaction: nextcord.Interaction, content: str, button_label: str):
+#         # Create a new View with a disabled button
+#         new_view = nextcord.ui.View()
+#         button = nextcord.ui.Button(label=button_label, style=nextcord.ButtonStyle.grey, disabled=True)
+#         new_view.add_item(button)
+#         # Edit the original message with new content and the updated view
+#         await interaction.message.edit(content=content, view=new_view)
 
-    @nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green, emoji='👍')
-    async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = True
-        # Assuming you have logic here to actually add the user to the ban list
-        await self.update_message(interaction, "This user has been added to the ban list.", "Added")
-        self.stop()
+#     @nextcord.ui.button(label='Yes', style=nextcord.ButtonStyle.green, emoji='👍')
+#     async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+#         self.value = True
+#         # Assuming you have logic here to actually add the user to the ban list
+#         await self.update_message(interaction, "This user has been added to the ban list.", "Added")
+#         self.stop()
 
-    @nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red, emoji='👎')
-    async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        self.value = False
-        await self.update_message(interaction, "This user has not been added to the ban list.", "Not Added")
-        self.stop()
+#     @nextcord.ui.button(label='No', style=nextcord.ButtonStyle.red, emoji='👎')
+#     async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+#         self.value = False
+#         await self.update_message(interaction, "This user has not been added to the ban list.", "Not Added")
+#         self.stop()
 
 def setup(bot):
     bot.add_cog(ModerationCog(bot))
