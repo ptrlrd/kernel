@@ -36,6 +36,7 @@ async def update_message(content):
 
 @bot.event
 async def on_ready():
+    await bot.tree.sync()
     """
     An event listener for when the bot is ready and operational.
 
