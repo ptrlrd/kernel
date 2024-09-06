@@ -104,16 +104,16 @@ class MessageManagementCog(commands.Cog):
         """
         await self.handle_command(interaction, message, HELP_FORUM_CHANNEL_ID)
 
-    @bot.message_command(name="Use the /roadmap command")
-    async def use_roadmap_command(self, interaction: Interaction, message: Message):
-        """
-        Discord message command to instruct users to use the /roadmap slash command.
+    # @bot.message_command(name="Use the /roadmap command")
+    # async def use_roadmap_command(self, interaction: Interaction, message: Message):
+    #     """
+    #     Discord message command to instruct users to use the /roadmap slash command.
 
-        Args:
-            interaction (Interaction): The interaction that triggered the command.
-            message (Message): The message where the command was invoked.
-        """
-        await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
+    #     Args:
+    #         interaction (Interaction): The interaction that triggered the command.
+    #         message (Message): The message where the command was invoked.
+    #     """
+    #     await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
         
     @bot.message_command(name="Low quality post")
     async def use_high_quality_command(self, interaction: Interaction, message: Message):
