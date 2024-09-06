@@ -118,7 +118,7 @@ class MessageManagementCog(commands.Cog):
     @bot.message_command(name="Low quality message")
     async def use_roadmap_command(self, interaction: Interaction, message: Message):
         """
-        Discord message command to instruct users to use the /roadmap slash command.
+        Discord message command to instruct users to read through our rules.
 
         Args:
             interaction (Interaction): The interaction that triggered the command.
