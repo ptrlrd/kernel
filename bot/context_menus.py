@@ -49,6 +49,8 @@ class MessageManagementCog(commands.Cog):
                 notification = f"{message.author.mention}, please showcase your work in <#{channel_id}> and read this message https://discord.com/channels/930170875049820181/930171437841526825/1132078814734848131, specifically the `Project Showcase Guidelines` section."
             elif channel_id == HELP_FORUM_CHANNEL_ID:
                 notification = f"{message.author.mention}, please ask for help in <#{channel_id}> and read this message https://discord.com/channels/930170875049820181/930171437841526825/1132078814734848131, specifically the `Question Quality Guidelines` section."
+            elif channel_id == "LOW_QUALITY_CHANNEL_ID":
+                notification = f"{message.author.mention}, please review our messages guidelines at https://discord.com/channels/930170875049820181/930171437841526825 and resubmit your message, this message violates the rules."
             else:
                 notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
 
@@ -118,14 +120,14 @@ class MessageManagementCog(commands.Cog):
     @bot.message_command(name="Low quality post")
     async def use_high_quality_command(self, interaction: Interaction, message: Message):
         """
-        Discord message command to instruct users to use the /roadmap slash command.
+        Discord message command to to do higher quality posts.
 
         Args:
             interaction (Interaction): The interaction that triggered the command.
             message (Message): The message where the command was invoked.
         """
-        await interaction.response.send_message("Please review our messages guidelines at https://discord.com/channels/930170875049820181/930171437841526825 and resubmit your message, this message violates the rules.")
-
+        await self.handle_command(interaction, message, "LOW_QUALITY_CHANNEL_ID")
+        
     @bot.message_command(name="How to use slash commands")
     async def how_to_use_slash_command(self, interaction: Interaction, message: Message):
         """
