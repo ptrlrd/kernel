@@ -43,10 +43,18 @@ class MessageManagementCog(commands.Cog):
         await interaction.response.defer(ephemeral=True)
 
         if await self.has_required_role(interaction):
-            notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
+            if channel_id == EMPLOYMENT_CHANNEL_ID:
+                notification = f"{message.author.mention}, please post your employment-related message in <#{channel_id}> and read this message https://discord.com/channels/930170875049820181/930171437841526825/1132078814734848131, specifically the `Employment Posting Guidelines` section."
+            elif channel_id == SHOWCASE_CHANNEL_ID:
+                notification = f"{message.author.mention}, please showcase your work in <#{channel_id}> and read this message https://discord.com/channels/930170875049820181/930171437841526825/1132078814734848131, specifically the `Project Showcase Guidelines` section."
+            elif channel_id == HELP_FORUM_CHANNEL_ID:
+                notification = f"{message.author.mention}, please ask for help in <#{channel_id}> and read this message https://discord.com/channels/930170875049820181/930171437841526825/1132078814734848131, specifically the `Question Quality Guidelines` section."
+            else:
+                notification = f"{message.author.mention}, please post your message in <#{channel_id}>. This channel is not for this type of conversation."
+
             await message.reply(notification)
 
-            countdown_duration = 60
+            countdown_duration = 15
             countdown_message = await interaction.followup.send(
                 f"Message will be deleted in {countdown_duration} seconds.", ephemeral=True)
 
