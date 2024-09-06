@@ -114,6 +114,17 @@ class MessageManagementCog(commands.Cog):
             message (Message): The message where the command was invoked.
         """
         await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
+    
+    @bot.message_command(name="Low quality message")
+    async def use_roadmap_command(self, interaction: Interaction, message: Message):
+        """
+        Discord message command to instruct users to use the /roadmap slash command.
+
+        Args:
+            interaction (Interaction): The interaction that triggered the command.
+            message (Message): The message where the command was invoked.
+        """
+        await interaction.response.send_message("Please review our messages guidelines at https://discord.com/channels/930170875049820181/930171437841526825 and resubmit your message, this message violates the rules.")
 
     @bot.message_command(name="How to use slash commands")
     async def how_to_use_slash_command(self, interaction: Interaction, message: Message):
