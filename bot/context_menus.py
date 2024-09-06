@@ -116,7 +116,7 @@ class MessageManagementCog(commands.Cog):
         await interaction.response.send_message("Please use the `/roadmap` slash command to view the DevOps Roadmap.")
     
     @bot.message_command(name="Low quality message")
-    async def use_roadmap_command(self, interaction: Interaction, message: Message):
+    async def use_low_quality_message(self, interaction: Interaction, message: Message):
         """
         Discord message command to instruct users to read through our rules.
 
