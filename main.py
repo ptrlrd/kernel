@@ -45,5 +45,5 @@ if __name__ == '__main__':
     bot.load_extension('bot.context_menus')
     bot.load_extension('bot.news_feed')
     # bot.load_extension('bot.moderation') Turning off because it's not working
-    # Start the bot
+    start_prometheus_server()
     bot.run(DISCORD_TOKEN)
