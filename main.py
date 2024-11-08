@@ -3,7 +3,16 @@ from bot.bot import bot
 from web.app import app
 from shared.config import DISCORD_TOKEN, ENABLE_LOGGING
 from shared.logger import setup_logging  # Importing from your logger module
+from prometheus_client import start_http_server, Gauge
+import time
 
+BOT_STATUS = Gauge('discord_bot_status', 'Status of the Discord bot', ['bot_name'])
+bot_name = 'Kernel'
+
+def start_prometheus_server():
+    # Start a Prometheus HTTP server on port 8000
+    start_http_server(8000, addr='0.0.0.0')
+    print("Prometheus server started on port 8000")
 
 def run():
     app.run(port=9999)
@@ -22,5 +31,5 @@ if __name__ == '__main__':
     bot.load_extension('bot.news_feed')
     # bot.load_extension('bot.moderation') Turning off because it's not working
     # Start the bot
-    bot.start_prometheus_server()
+    start_prometheus_server()
     bot.run(DISCORD_TOKEN)
