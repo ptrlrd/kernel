@@ -65,6 +65,6 @@ def start_prometheus_server():
     print("Prometheus server started on port 8000")
 
 if __name__ == '__main__':
-    start_prometheus_server()
+
     # Run the bot with the specified token
     bot.run(DISCORD_TOKEN)
