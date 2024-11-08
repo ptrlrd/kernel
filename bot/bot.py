@@ -61,7 +61,7 @@ async def on_disconnect():
 
 def start_prometheus_server():
     # Start a Prometheus HTTP server on port 8000
-    start_http_server(8000)
+    start_http_server(8000, addr='0.0.0.0')
     print("Prometheus server started on port 8000")
 
 if __name__ == '__main__':
