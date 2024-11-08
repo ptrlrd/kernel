@@ -1,6 +1,11 @@
 import nextcord
 from nextcord.ext import commands
 from shared.config import CHANNEL_ID, DISCORD_TOKEN, GUILD_ID
+from prometheus_client import start_http_server, Gauge
+import time
+
+BOT_STATUS = Gauge('discord_bot_status', 'Status of the Discord bot', ['bot_name'])
+bot_name = 'Kernel'
 
 # Create an instance of the bot with all intents enabled
 intents = nextcord.Intents.all()
@@ -36,17 +41,30 @@ async def update_message(content):
 
 @bot.event
 async def on_ready():
-    await bot.tree.sync()
     """
     An event listener for when the bot is ready and operational.
 
     Prints a message to the console to indicate that the bot is ready.
     """
-    print('Bot is ready.')
+    print(f'{bot_name} has connected to Discord!')
+    # Mark the bot as "up" when it is online
+    BOT_STATUS.labels(bot_name=bot_name).set(1)
 
 # Importing slash commands and context menus
 # from . import slash_commands, context_menus
 
+@bot.event
+async def on_disconnect():
+    print(f'{bot_name} has disconnected from Discord!')
+    # Mark the bot as "down" when it is offline
+    BOT_STATUS.labels(bot_name=bot_name).set(0)
+
+def start_prometheus_server():
+    # Start a Prometheus HTTP server on port 8000
+    start_http_server(8000)
+    print("Prometheus server started on port 8000")
+
 if __name__ == '__main__':
+    start_prometheus_server()
     # Run the bot with the specified token
     bot.run(DISCORD_TOKEN)

@@ -4,3 +4,4 @@ requests
 python-dotenv
 asyncio
 feedparser
+prometheus_client
