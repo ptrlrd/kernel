@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands
-from shared.config import CHANNEL_ID, DISCORD_TOKEN, GUILD_ID
-from main import BOT_STATUS, bot_name
+from shared.config import CHANNEL_ID, DISCORD_TOKEN, GUILD_ID, BOT_STATUS, BOT_NAME
 
 # Create an instance of the bot with all intents enabled
 intents = nextcord.Intents.all()
@@ -41,18 +40,14 @@ async def on_ready():
 
     Prints a message to the console to indicate that the bot is ready.
     """
-    print(f'{bot_name} has connected to Discord!')
+    print(f'{BOT_NAME} has connected to Discord!')
     # Mark the bot as "up" when it is online
-    BOT_STATUS.labels(bot_name=bot_name).set(1)
+    BOT_STATUS.labels(bot_name=BOT_NAME).set(1)
 
 
 @bot.event
 async def on_disconnect():
-    print(f'{bot_name} has disconnected from Discord!')
+    print(f'{BOT_NAME} has disconnected from Discord!')
     # Mark the bot as "down" when it is offline
-    BOT_STATUS.labels(bot_name=bot_name).set(0)
+    BOT_STATUS.labels(bot_name=BOT_NAME).set(0)
 
-if __name__ == '__main__':
-
-    # Run the bot with the specified token
-    bot.run(DISCORD_TOKEN)

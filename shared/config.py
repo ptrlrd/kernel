@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+from prometheus_client import Gauge
 
 GUILD_ID = 930170875049820181
 CHANNEL_ID = 978644045519802378  # This will be imported in both bot and web modules
@@ -19,3 +20,5 @@ RSS_FEED_URLS = ["https://hnrss.org/frontpage",
                  "https://www.wired.com/feed/rss",
                  ]
 
+BOT_STATUS = Gauge('discord_bot_status', 'Status of the Discord bot', ['bot_name'])
+BOT_NAME = 'Kernel'
