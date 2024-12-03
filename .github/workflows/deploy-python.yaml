@@ -4,11 +4,14 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  
 
 jobs:
   build-and-push:
     runs-on: self-hosted
+    if: github.actor == 'ptrlrd' && github.repository_owner == 'ptrlrd'
     steps:
+    
       - name: Checkout Repository
         uses: actions/checkout@v2
 
