@@ -23,6 +23,7 @@ class CoreCommandCogs(commands.Cog):
 
     @bot.slash_command(name="vote", description="Vote for the server on different platforms!")
     async def vote(self, interaction: Interaction):
+        await interaction.response.defer(ephemeral=True)
         view = ui.View()
         # Add voting platform buttons to the view
         view.add_item(ui.Button(style=ButtonStyle.url, label="Top.gg", url="https://top.gg/servers/930170875049820181"
@@ -99,6 +100,7 @@ class UtilityCog(commands.Cog):
 
     @bot.slash_command(name="roadmap", description="Learn more about DevOps Roadmap")
     async def devops_roadmap(self, interaction: Interaction):
+        await interaction.response.defer(ephemeral=True)
         embeds = [
             nextcord.Embed(title="What is DevOps?",
                            description="DevOps is all about bringing developers and operations teams together to improve software delivery. The key focus areas are automation, infrastructure and monitoring."),
