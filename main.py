@@ -1,4 +1,5 @@
 import threading
+import asyncio
 from bot.bot import bot
 from web.app import app
 from shared.config import DISCORD_TOKEN, ENABLE_LOGGING, BOT_STATUS, BOT_NAME
@@ -6,6 +7,21 @@ from shared.logger import setup_logging  # Importing from your logger module
 from prometheus_client import start_http_server
 import time
 
+
+async def start_bot():
+    retry_count = 0
+    max_retries = 5
+    
+    while retry_count < max_retries:
+        try:
+            await bot.start(DISCORD_TOKEN)
+        except aiohttp.client_exceptions.ClientConnectorError as e:
+            print(f"Connection error: {e}. Retrying in 10 seconds...")
+            retry_count += 1
+            await asyncio.sleep(10)
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            break
 
 def start_prometheus_server():
     # Start a Prometheus HTTP server on port 8000
@@ -46,4 +62,4 @@ if __name__ == '__main__':
     bot.load_extension('bot.news_feed')
     # bot.load_extension('bot.moderation') Turning off because it's not working
     start_prometheus_server()
-    bot.run(DISCORD_TOKEN)
+    asyncio.run(start_bot())
